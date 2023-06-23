@@ -38,28 +38,15 @@ def runner(args):
              # transforms.RandomHorizontalFlip(),
              # transforms.RandomVerticalFlip(),
              ])
-        # base_transforms = transforms.Compose(
-        #     [transforms.Resize((input_size, input_size)),
-        #      transforms.ToTensor()])
-        # ,
-        # transforms.Normalize(mean=train_dataset_configs['mean'], std=train_dataset_configs['std'])])
     elif train_dataset_configs['channels'] == 1:
-        # base_transforms = transforms.Compose(
-        #     [transforms.Resize((input_size, input_size)),
-        #      transforms.ToTensor()])  # ,
         base_transforms = transforms.Compose(
             [transforms.Resize((input_size,input_size)),
              transforms.ToTensor(),
              ])
-        # transforms.Normalize(mean=[sum(train_dataset_configs['mean']) / len(train_dataset_configs['mean'])],
-        #                      std=[sum(train_dataset_configs['std']) / len(train_dataset_configs['std'])])])
 
     train_datasets = MFAHIQ_Datasets(train_dataset_configs, base_transforms)
     test_transforms = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
     test_datasets = MFAHIQ_Datasets(test_dataset_configs, test_transforms)
-    # train_datasets = TrainDataset(train_dataset_configs)
-    # test_datasets = TrainDataset(test_dataset_configs)
-    # model = eval(model_configs['model_name'])(model_configs)
     model = eval(model_configs['model_name'])(configs)
 
     print('Model Para:', count_parameters(model))
