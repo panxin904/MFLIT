@@ -14,7 +14,7 @@ from core.util import load_config, count_parameters
 def get_args():
     parser = argparse.ArgumentParser(description='run')
 
-    parser.add_argument('--config', type=str, default='./config/ConvNeXt.yaml')
+    parser.add_argument('--config', type=str, default='./config/config.yaml')
     parser.add_argument('--train', action='store_true', default=False)
     parser.add_argument('--test', action='store_true', default=False)
 
