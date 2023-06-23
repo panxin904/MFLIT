@@ -1,7 +1,6 @@
 PROJECT:
   name: 'MFNeXt'
   save_path: './work_dirs/MFLIT6/'
-# MFLIT1 final model; MFLIT only CFM MFLIT2 CFM + FFM MFLIT3 no FAM MFLIT5 ResNet MFLIT6 SwinTransformer
 TRAIN_DATASET:
   phase: 'train'
   patch_size: 256
