@@ -4,10 +4,10 @@ import torch
 import argparse
 from core.model import *
 import torchvision.transforms.functional as f
-from tools.train_MF_AHIQ import train
-from tools.test import test1
+from tools.train import train
+from tools.test import test
 from core.dataset import Fusion_Datasets
-from core.dataset.MFAHIQ_datasets import MFAHIQ_Datasets
+from core.dataset.Fusion_datasets import Datasets
 import torchvision.transforms as transforms
 from core.util import load_config, count_parameters
 
