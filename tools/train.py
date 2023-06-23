@@ -13,9 +13,6 @@ from tools.test import testintrain
 def train(model, train_datasets, test_datasets, configs):
     if not os.path.exists(os.path.join(configs['PROJECT']['save_path'], configs['PROJECT']['name'])):
         os.mkdir(os.path.join(configs['PROJECT']['save_path'], configs['PROJECT']['name']))
-    # weight_path = r'F:\A_Matte_MFIFGAN\Pytorch_Image_Fusion-main\work_dirs\MFLIT1\MFNeXt\model_100.pth'
-    # checkpoint = torch.load(weight_path)
-    # model.load_state_dict(checkpoint['model'].state_dict())
     model.train()
     '''define visual tools(Tensorboard)'''
     train_writer = SummaryWriter(log_dir=os.path.join(configs['PROJECT']['save_path'], configs['PROJECT']['name']))
@@ -134,65 +131,3 @@ def train(model, train_datasets, test_datasets, configs):
                                                     },
                                          global_step=epoch)
             train_writer.add_scalar('Train Loss epoch', loss_epoch / train_num_iter, global_step=epoch)
-        # if configs['TRAIN']['valid_interval'] is not None and epoch in eval(configs['TRAIN']['valid_interval']):
-        #     val_loss_epoch = 0
-        #     with tqdm(total=val_num_iter) as val_bar:
-        #         model.eval()
-        #         with torch.no_grad():
-        #             for iter, data in enumerate(val_dataloader):
-        #                 if is_use_gpu:
-        #                     model = model.cuda()
-        #                     data = {sensor: data[sensor].cuda() for sensor in data}
-        #                 coarsemaps, finemaps = model(data)
-        #                 coarsemaps = [i.sigmoid() for i in coarsemaps]
-        #                 finemaps = [i.sigmoid() for i in finemaps]
-        #                 '''compute loss'''
-        #                 loss_cfm = loss_func[0](coarsemaps[0], data['focus_map'], epoch) * \
-        #                            configs['TRAIN']['loss_weights'][0]
-        #                 loss_fm = loss_func[1](finemaps[0], data['focus_map'], epoch) * \
-        #                           configs['TRAIN']['loss_weights'][1]
-        #                 loss_bound = loss_func[2](finemaps[1], data['Boundary'], epoch) * \
-        #                              configs['TRAIN']['loss_weights'][2]
-        #                 # train_writer.add_scalars('Val Rate Local and Global',
-        #                 #                          {'Global': model.proj_f.rate1, 'Local': model.proj_f.rate2},
-        #                 #                          global_step=val_iter)
-        #                 '''compute all loss'''
-        #                 loss_batch = loss_cfm + loss_fm + loss_bound
-        #                 '''optimize parameters'''
-        #                 val_loss_epoch += loss_batch.item()
-        #                 '''loss->tensorboard'''
-        #                 train_writer.add_scalars('Val Train Loss', {'Coarse FM Loss': loss_cfm,
-        #                                                             'Fine FM Loss': loss_fm,
-        #                                                             'Fine Bound Detect Loss': loss_bound},
-        #                                              global_step=val_iter)
-        #                 '''total loss->tensorboard ; print information'''
-        #                 train_writer.add_scalar('Val Iter Loss', loss_batch, global_step=val_iter)
-        #                 val_bar.set_description(
-        #                     'Epoch: {}/{}. Valid. Iter: {}/{}. Content Loss: {:.5f}  All loss: {:.5f} LR: {:.10f}'.format(
-        #                         epoch, configs['TRAIN']['max_epoch'], iter + 1, val_num_iter, loss_batch,
-        #                                                               loss_epoch / val_num_iter,
-        #                         optimizer.param_groups[0]['lr']))
-        #
-        #                 if configs['TRAIN']['debug_interval'] is not None and val_iter % 1000 == 0:
-        #                     """反归一化 将归一化的输入数据反归一化后方便测试和展示"""
-        #                     unnorm = torchvision.transforms.Normalize((-0.5 / 0.5, -0.5 / 0.5, -0.5 / 0.5),
-        #                                                               (1 / 0.5, 1 / 0.5, 1 / 0.5))
-        #                     for sensor in data:
-        #                         if sensor == 'focus_map' or sensor == 'Boundary' or sensor == 'coarse_fm' or sensor == 'coarse_bound':
-        #                             data.update({sensor: data[sensor]})
-        #                         else:
-        #                             data.update({sensor: unnorm(data[sensor])})
-        #                     input_imgs1 = debug1(configs['MODEL'], configs['TRAIN_DATASET'], data)
-        #                     input_imgs1 = [input_imgs1[sensor] for sensor in configs['MODEL']['input_sensors'][0:2]]
-        #                     input_imgs2 = debug2(configs['MODEL'], configs['TRAIN_DATASET'], data)
-        #                     input_imgs2 = [input_imgs2[sensor] for sensor in configs['MODEL']['input_sensors'][2:4]]
-        #                     train_writer.add_image('Val Far and Near', torch.cat(input_imgs1, dim=2), val_iter,
-        #                                            dataformats='NCHW')
-        #                     train_writer.add_image('valid focus_map and Boundary', torch.cat(input_imgs2, dim=2), val_iter,
-        #                                            dataformats='NCHW')
-        #                     train_writer.add_image('valid coarse maps', torch.cat(debug_segmap(coarsemaps), dim=2),
-        #                                            val_iter, dataformats='NCHW')
-        #                     train_writer.add_image('valid fine maps and bounds', torch.cat(debug_segmap_(finemaps), dim=2),
-        #                                            val_iter, dataformats='NCHW')
-        #                 val_iter += 1
-        #                 val_bar.update(1)
